@@ -37,6 +37,10 @@ Already avaible:
 Not yet avaiable:
 - GUI
 - Pause/Play
+- "Live" Marker editing
+
+### Branches
+There is a main branch, the main branch is kinda stable, it's called `master`. There is an unstable development branch, called `dev`.
 
 [img1]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightselection.png?raw=truee "MiDi trigger"
 [img2]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightMidi2.png?raw=true "MiDi trigger"
