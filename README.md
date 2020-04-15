@@ -19,5 +19,6 @@ Then edit your points.dat (you can rename it). The syntax is easy: `time:yourNr.
 2500:60.5  # Invalid comment
 ```
 This file will start the scene "60" and turn it off after one second.
+
 [img1]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightselection.png?raw=truee "MiDi trigger"
 [img2]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightMidi2.png?raw=true "MiDi trigger"
