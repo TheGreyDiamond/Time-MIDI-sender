@@ -20,5 +20,23 @@ Then edit your points.dat (you can rename it). The syntax is easy: `time:yourNr.
 ```
 This file will start the scene "60" and turn it off after one second.
 
+## How to use config files
+There are three atributes in a config file. The file should end with `*.conf`. Example file:
+```
+port:testLoopback 3
+music:Eyes_of_Glory.mp3
+marker:points.dat
+```
+`music` is your music file. `port` is your digital MIDI port. `marker` is your marker file.
+
+## Features
+Already avaible:
+- Sending midi notes
+- Configfiles
+
+Not yet avaiable:
+- GUI
+- Pause/Play
+
 [img1]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightselection.png?raw=truee "MiDi trigger"
 [img2]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightMidi2.png?raw=true "MiDi trigger"
