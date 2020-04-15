@@ -5,7 +5,7 @@ import mido
 
 from mido import Message
 pygame.mixer.init()
-portname = "maOut 2"
+portname = "testLoopback 2"
 temp = input("Music file=> ")
 if(temp == "m"):
     pygame.mixer.music.load("Eyes_of_Glory.mp3")
