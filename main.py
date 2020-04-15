@@ -4,6 +4,7 @@ import time
 import mido
 from mido import Message
 import tkinter
+from tkinter import filedialog
 import easygui
 pygame.mixer.init()
 
@@ -25,6 +26,28 @@ def exitProg():
             exit()
     else:
         exit()
+
+def openConfig():
+    global portname
+    global musicFile
+    global markerFile
+    path = filedialog.askopenfilename(initialdir = "/",title = "Select config file",filetypes = (("Config","*.conf"),("all files","*.*")))
+    co = open(path, "r")
+    confLines = co.readlines()
+    co.close()
+    confAtr = {}
+    for c in confLines:
+        if(not c.startswith("#")):
+            c = c.replace("\n","")
+            cp = c.split(":")
+            confAtr[cp[0]] = cp[1]
+    portname = confAtr["port"]
+    musicFile = confAtr["music"]
+    markerFile = confAtr["marker"]
+    pygame.mixer.music.load(musicFile)    
+    
+def saveConfig():
+    print("save conf")
 
 while not isOkay:
     qu = input("Do you want to use GUI (Y/N) WARNING GUI IS UNSTABLE => ")
@@ -102,10 +125,13 @@ else:
     menu = tkinter.Menu(window)
     window.config(menu=menu)
     file = tkinter.Menu(menu)
+    file.add_command(label="Open", command=openConfig)
+    file.add_command(label="Save", command=saveConfig)
     file.add_command(label="Exit", command=exitProg)
+    
     menu.add_cascade(label="File", menu=file)
     edit = tkinter.Menu(menu)
-    edit.add_command(label="Undo")
+    #edit.add_command(label="Undo")
     menu.add_cascade(label="Edit", menu=edit)
     markerFile = "points.dat" ### JUST FOR DEBUG
 
