@@ -38,6 +38,7 @@ Not yet avaiable:
 - GUI
 - Pause/Play
 - "Live" Marker editing
+- Update checker
 
 ### Branches
 There is a main branch, the main branch is kinda stable, it's called `master`. There is an unstable development branch, called `dev`.
