@@ -5,19 +5,74 @@ import mido
 
 from mido import Message
 pygame.mixer.init()
-portname = "testLoopback 2"
-temp = input("Music file=> ")
-if(temp == "m"):
-    pygame.mixer.music.load("Eyes_of_Glory.mp3")
-else:
-    pygame.mixer.music.load(temp)
-temp2 = input("Marker file=> ")
-if(temp2 == "m"):
-    f = open("points.dat","r")
-else:
-    f = open(temp2, "r")
 
-raw = f.readlines()
+print("Welcome")
+isOkay = False
+configY = None
+#markerObj = None
+while not isOkay:
+    conf = input("Do you want to load a config file (Y/N) => ")
+    if(conf == "Y"):
+        configF = input("Configfile name => ")
+        try:
+            co = open(configF, "r")
+            confLines = co.readlines()
+            co.close()
+        except FileNotFoundError:
+            print("Unable to load config file. Retry.")
+        else:
+            configY = True
+            isOkay = True
+    elif(conf == "N"):
+        print("Okay, not loading a config file")
+        configY = False
+        isOkay = True
+    else:
+        print("Invalid answer")
+if(configY):
+    confAtr = {}
+    for c in confLines:
+        if(not c.startswith("#")):
+            c = c.replace("\n","")
+            cp = c.split(":")
+            confAtr[cp[0]] = cp[1]
+    portname = confAtr["port"]
+    musicFile = confAtr["music"]
+    markerFile = confAtr["marker"]
+    pygame.mixer.music.load(musicFile)
+else:
+    portname = input("Port => ")
+    
+        
+        #pygame.mixer.music.load(musicFile)
+        
+    #portname = "testLoopback 2"
+    isOkay = False
+    while not isOkay:
+        try:
+            musicFile = input("Music file=> ")
+            pygame.mixer.music.load(musicFile)
+            isOkay = True
+        except pygame.error:
+            print("Unable to open music file. Retry.")
+            
+    isOkay = False
+    while not isOkay:
+        try:
+            markerFile = input("Marker file=> ")
+            markerObj = open(markerFile, "r")
+            markerObj.close()
+            isOkay = True
+        except FileNotFoundError:
+            print("Unable to open marker file. Retry.")
+    #markerFile = input("Marker file=> ")
+    #if(markerFile == "m"):
+    #    f = open("points.dat","r")
+    #else:
+    #    f = open(markerFile, "r")
+markerObj = open(markerFile, "r")
+raw = markerObj.readlines()
+markerObj.close()
 points = {}
 for o in raw:       # convert to dict
     if(not o.startswith("#")):
@@ -50,6 +105,5 @@ try:
 
             
 except KeyboardInterrupt:
-    f.close()
     pygame.mixer.music.stop()
     print(points)
