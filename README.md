@@ -63,4 +63,4 @@ There is a main branch, the main branch is kinda stable, it's called `master`. T
 
 [img1]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightselection.png?raw=truee "MiDi trigger"
 [img2]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightMidi2.png?raw=true "MiDi trigger"
-[main]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/Time-midi-sender-main.png?raw=true "Main window"
+[main]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/Time-midi-sender-main-new.png?raw=true "Main window"
