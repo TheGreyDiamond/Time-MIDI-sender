@@ -50,7 +50,7 @@ Not yet avaiable:
 - Command line arguments
 
 Known Bugs + Errors:
-- When hitting unload, the code fails
+- Markers from 0000 to 500 may fail
 
 ### Branches
 There is a main branch, the main branch is kinda stable, it's called `master`. There is an unstable development branch, called `dev`.
