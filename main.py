@@ -152,7 +152,6 @@ def aboutPopup():
 ## Will force usage of GUI since 1.0.6
 guiEn = True
 isOkay = True
-
     
 #while not isOkay:
 #    qu = input("Do you want to use GUI (Y/N) WARNING GUI IS UNSTABLE => ")
