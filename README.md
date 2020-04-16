@@ -21,11 +21,11 @@ Then edit your points.dat (you can rename it). The syntax is easy: `time:yourNr.
 This file will start the scene "60" and turn it off after one second.
 
 ## How to use config files
-There are three atributes in a config file. The file should end with `*.conf`. Example file:
+There are three atributes in a config file. The file should end with `*.conf`. All files(config, marker and music) **need** to be in the same folder. The folder needs to have the same name as the config and the makerfile (excpet for the fileending) Example file (when the file is called `myProject.conf`):
 ```
 port:testLoopback 3
 music:Eyes_of_Glory.mp3
-marker:points.dat
+marker:myProject.dat
 ```
 `music` is your music file. `port` is your digital MIDI port. `marker` is your marker file.
 
@@ -33,12 +33,13 @@ marker:points.dat
 Already avaible:
 - Sending midi notes
 - Configfiles
+- Pause/Play
+- Loading/Unloading projects
 
 WIP:
 - GUI
 
 Not yet avaiable:
-- Pause/Play
 - "Live" Marker editing
 - Update checker
 - Command line arguments
