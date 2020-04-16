@@ -34,11 +34,14 @@ Already avaible:
 - Sending midi notes
 - Configfiles
 
-Not yet avaiable:
+WIP:
 - GUI
+
+Not yet avaiable:
 - Pause/Play
 - "Live" Marker editing
 - Update checker
+- Command line arguments
 
 ### Branches
 There is a main branch, the main branch is kinda stable, it's called `master`. There is an unstable development branch, called `dev`.
