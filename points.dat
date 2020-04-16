@@ -1,4 +1,0 @@
-# 1 Turns it on  1.5 Turns it off. So x.0 ON x.5 OFF
-# Midi triggering in dasLight Channel seems to be random but try 2, amount = ???? (try 60), on = 60, off = 64, typ = "Note On / Off"
-1000:60
-2000:60.5
