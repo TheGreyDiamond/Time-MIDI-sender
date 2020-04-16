@@ -111,11 +111,8 @@ def unload():
     global loaded
     global paused
     if(loaded == True):
-        musicFile = ""
-        markerFile = ""
         portObj = None
-        portname = ""
-        pygame.mixer.music.unload()
+        pygame.mixer.music.unload() ## Will fail with old pygame version (needs pygame>=2.0.0dev6)
         loaded = False
         paused = False
     else:
@@ -232,11 +229,11 @@ if(guiEn == False):
     pygame.mixer.music.play()
 
 else:
-    print("Do GUI stuff here")
+    print("Building GUI")
     window = tkinter.Tk()
     window.title("Time MIDI Sender")
     window.geometry('800x300')
-    window["bg"] = "white"
+    window["bg"] = "gray64"
     menu = tkinter.Menu(window)
     window.config(menu=menu)
     file = tkinter.Menu(menu)
@@ -244,32 +241,32 @@ else:
     file.add_command(label="Save", command=saveConfig)
     file.add_command(label="Exit", command=exitProg)
     
-    opendFile = tkinter.Label(window, text = projectName)
+    opendFile = tkinter.Label(window, text = projectName, bg="gray64")
     opendFile.grid(row=0, column=0)
-    loadB = tkinter.Button(window, text="Load", command = load)
+    loadB = tkinter.Button(window, text="Load", command = load, bg="gray64")
     loadB.grid(row=0, column = 1, padx=2)
-    unloadB = tkinter.Button(window, text="Unload", command = unload)
+    unloadB = tkinter.Button(window, text="Unload", command = unload, bg="gray64")
     unloadB.grid(row=0, column = 2, padx=2)
 
     
-    playControls = tkinter.Frame(window, borderwidth = 1,width=100, height=100, bg="White", relief=tkinter.SUNKEN)
-    control = tkinter.Label(playControls, text = "Play control")
-    control.grid(row=1, column = 5)
-    timeFrame = tkinter.Frame(window, borderwidth = 1,width=40, height=50, bg="White", relief=tkinter.SUNKEN) ## timeframe, get it?
+    playControls = tkinter.Frame(window, borderwidth = 1,width=100, height=100, bg="gray64", relief=tkinter.SUNKEN)
+    control = tkinter.Label(playControls, text = "Play control", bg="gray64")
+    control.grid(row=1, column = 2)
+    timeFrame = tkinter.Frame(window, borderwidth = 1,width=40, height=50, bg="gray64", relief=tkinter.SUNKEN) ## timeframe, get it?
     
-    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000")   # Format HH:MM:SS.ms-
+    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000", bg="gray64")   # Format HH:MM:SS.ms-
     playTime.grid(row=1, column = 1)
-    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0")
+    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0", bg="gray64")
     playTimeMillis.grid(row=2, column = 1)
-    timeFrame.grid(row=10, column = 5)
+    timeFrame.grid(row=11, column = 4)
     
-    play = tkinter.Button(playControls, text="Play", command = myPlay)
+    play = tkinter.Button(playControls, text="Play", command = myPlay, bg="gray64")
     play.grid(row=2, column = 1, padx = 2)
-    pause = tkinter.Button(playControls, text="Pause", command = myPause)
+    pause = tkinter.Button(playControls, text="Pause", command = myPause, bg="gray64")
     pause.grid(row=2, column = 2, padx = 2)
-    stop = tkinter.Button(playControls, text="Stop", command = myStop)
+    stop = tkinter.Button(playControls, text="Stop", command = myStop, bg="gray64")
     stop.grid(row=2, column = 3, padx = 2)
-    playControls.grid(row=10, column=4, rowspan=5, columnspan = 1)
+    playControls.grid(row=10, column=4)
 
 
     
