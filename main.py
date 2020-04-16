@@ -7,9 +7,10 @@ import tkinter
 from tkinter import filedialog
 from tkinter.messagebox import showinfo
 import easygui
+
 pygame.mixer.init()
 
-version = "1.0.6"
+version = "1.0.7"
 
 print("Welcome")
 isOkay = False
@@ -24,6 +25,9 @@ paused = False
 projectName = "Project: ---"
 opendFile = None
 points = {}
+playTime = None
+playTimeMillis = None
+timeToolTip = None
 def exitProg():
     if(notSaved):
         ot = easygui.buttonbox('There are unsaved changes', 'Quit', ('Save', 'Cancle', 'Quit'))
@@ -149,6 +153,8 @@ def aboutPopup():
     message  = '''Thank you for using Time MIDI sender!\nUsing version: ''' + version + '''\nAuthors: TheGreydiamond(thgreydiamond.de)'''
     showinfo("About", message)
 
+
+
 ## Will force usage of GUI since 1.0.6
 guiEn = True
 isOkay = True
@@ -241,20 +247,31 @@ else:
     opendFile = tkinter.Label(window, text = projectName)
     opendFile.grid(row=0, column=0)
     loadB = tkinter.Button(window, text="Load", command = load)
-    loadB.grid(row=2, column = 1, padx=2)
+    loadB.grid(row=0, column = 1, padx=2)
     unloadB = tkinter.Button(window, text="Unload", command = unload)
-    unloadB.grid(row=2, column = 2, padx=2)
+    unloadB.grid(row=0, column = 2, padx=2)
 
+    
     playControls = tkinter.Frame(window, borderwidth = 1,width=100, height=100, bg="White", relief=tkinter.SUNKEN)
     control = tkinter.Label(playControls, text = "Play control")
     control.grid(row=1, column = 5)
+    timeFrame = tkinter.Frame(window, borderwidth = 1,width=40, height=50, bg="White", relief=tkinter.SUNKEN) ## timeframe, get it?
+    
+    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000")   # Format HH:MM:SS.ms-
+    playTime.grid(row=1, column = 1)
+    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0")
+    playTimeMillis.grid(row=2, column = 1)
+    timeFrame.grid(row=10, column = 5)
+    
     play = tkinter.Button(playControls, text="Play", command = myPlay)
     play.grid(row=2, column = 1, padx = 2)
     pause = tkinter.Button(playControls, text="Pause", command = myPause)
     pause.grid(row=2, column = 2, padx = 2)
     stop = tkinter.Button(playControls, text="Stop", command = myStop)
     stop.grid(row=2, column = 3, padx = 2)
-    playControls.grid(row=10, column=0, rowspan=5, columnspan = 1)
+    playControls.grid(row=10, column=4, rowspan=5, columnspan = 1)
+
+
     
     
     
@@ -284,6 +301,7 @@ if(guiEn == False):
 
                     #print(" !!!!!!!!!!! " + str(str(points[pygame.mixer.music.get_pos()]).endswith(".0")))
                 ti = pygame.mixer.music.get_pos()
+                
                 if( ti in points):
                     if(str(points[ti]).endswith(".0") == True):
                         print("Note on")
@@ -311,6 +329,13 @@ else:
             if(evt != 0): print(evt)
             if(playing):
                 ti = pygame.mixer.music.get_pos()
+                pre = str(ti%1000)
+                while(len(pre) < 3):
+                    pre = "0" + str(pre)
+                formTime = "Time: " + time.strftime('%H:%M:%S:{}'.format(pre), time.gmtime(ti/1000.0))# + " (Milliseconds: " + str(ti) + ")"
+                playTime["text"] = formTime
+                playTimeMillis["text"] = "Milliseconds: " + str(ti)
+                
                 if( ti in points):
                     if(str(points[ti]).endswith(".0") == True):
                         print("Note on")
