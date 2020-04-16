@@ -10,7 +10,7 @@ import easygui
 
 pygame.mixer.init()
 
-version = "1.0.7"
+version = "1.0.8"
 
 print("Welcome")
 isOkay = False
