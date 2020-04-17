@@ -14,6 +14,7 @@ import easygui
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import matplotlib.lines as mlines
 from scipy.io import wavfile
 
 pygame.mixer.init()
@@ -204,6 +205,22 @@ def updateTimeText():
     playTime["text"] = formTime
     playTimeMillis["text"] = "Milliseconds: " + str(ti)
 
+
+def newline(p1, p2):
+    ax = plt.gca()
+    xmin, xmax = ax.get_xbound()
+
+    if(p2[0] == p1[0]):
+        xmin = xmax = p1[0]
+        ymin, ymax = ax.get_ybound()
+    else:
+        ymax = p1[1]+(p2[1]-p1[1])/(p2[0]-p1[0])*(xmax-p1[0])
+        ymin = p1[1]+(p2[1]-p1[1])/(p2[0]-p1[0])*(xmin-p1[0])
+
+    l = mlines.Line2D([xmin,xmax], [ymin,ymax])
+    ax.add_line(l)
+    return l
+
 def sendMidis(Mdict):
     
     global ti
@@ -388,15 +405,9 @@ if(guiEn == False):
             print(port)
             while True:
                 #print("Time: " + str(pygame.mixer.music.get_pos()/1000) + " Seconds")
-                
-                
-
                     #print(" !!!!!!!!!!! " + str(str(points[pygame.mixer.music.get_pos()]).endswith(".0")))
                 ti = pygame.mixer.music.get_pos()
-                
-                
-
-                
+                                
     except KeyboardInterrupt:
         pygame.mixer.music.stop()
         exitProg()
@@ -408,30 +419,28 @@ else:
     mT = False
     while True:
         window.update()
+        updateTimeText()
+        window.update()
         if(mT):
             canvas._tkcanvas.pack_forget()
-                
         if(loaded):
-            updateTimeText()
             
             ti = pygame.mixer.music.get_pos()
-            
             a.set_xlim(ti,ti+60000)
-            canvas = None
+            #canvas = None
             canvas = FigureCanvasTkAgg(f, master=curve)
-
             canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
             canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+            window.update()
             mT = True
             window.update()
-##            
+            #window.update()
             #canvas._tkcanvas.pack_forget()
             #if(evt != 0): print(evt)
             #if(playing):
                  #print("Stuff")
                 #start_new_thread(updateTimeText,())
-                
                 #if( ti in points):
                 #    if(str(points[ti]).endswith(".0") == True):
                 #        print("Note on")
@@ -443,8 +452,3 @@ else:
                 #        msg = Message('note_off', note=int(str(points[ti]).split(".")[0]), channel = 1)
                 #        print('Sending {}'.format(msg))
                 #        portObj.send(msg)
-            
-            #if(play):
-            #    pygame.mixer.music.play()
-            #else:
-            #    pygame.mixer.music.pause()
