@@ -9,9 +9,8 @@ from mido import Message
 import tkinter
 from tkinter import filedialog
 from tkinter.messagebox import showinfo
-
+from threading import Thread
 import easygui
-
 from numpy import arange, sin, pi
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -19,7 +18,7 @@ from scipy.io import wavfile
 
 pygame.mixer.init()
 
-version = "1.0.8"
+version = "1.0.9DEV"
 
 print("Welcome")
 isOkay = False
@@ -42,8 +41,12 @@ a = None
 f = None
 canvas = None
 curve = None
+ti = 0
+p = True
+mainRunning = True
 def exitProg():
     global window
+    global mainRunning
     if(notSaved):
         ot = easygui.buttonbox('There are unsaved changes', 'Quit', ('Save', 'Cancle', 'Quit'))
         if(ot == "Save"):
@@ -60,6 +63,7 @@ def exitProg():
                 pygame.mixer.music.stop()
             if(loaded):   
                 unload()
+            mainRunning = False
             window.destroy()
             exit()
     else:
@@ -108,6 +112,7 @@ def load():
     global a
     global f
     global curve
+    global p 
     if( not loaded):
         pygame.mixer.music.load(musicFile)
         markerObj = open(markerFile, "r")
@@ -135,6 +140,7 @@ def load():
         
         portObj = mido.open_output(portname, autoreset=True)
         loaded = True
+        p = True
     else:
         showinfo("Info", "Project is already loaded!")
 
@@ -185,7 +191,49 @@ def aboutPopup():
     message  = '''Thank you for using Time MIDI sender!\nUsing version: ''' + version + '''\nAuthors: TheGreydiamond(thgreydiamond.de)'''
     showinfo("About", message)
 
+def updateTimeText():
+    global playTime
+    global playTimeMillis
+    global ti
+    global mainRunning
 
+    pre = str(ti%1000)
+    while(len(pre) < 3):
+        pre = "0" + str(pre)
+    formTime = "Time: " + time.strftime('%H:%M:%S:{}'.format(pre), time.gmtime(ti/1000.0))# + " (Milliseconds: " + str(ti) + ")"
+    playTime["text"] = formTime
+    playTimeMillis["text"] = "Milliseconds: " + str(ti)
+
+def sendMidis(Mdict):
+    
+    global ti
+    global portObj
+    global mainRunning
+    global p
+    global points
+    print("Started sendMidi function")
+    
+    while(mainRunning):
+        if(p):
+            print( " UPDATE: " + str(points))
+            p = False
+        ti = pygame.mixer.music.get_pos()
+        #print(ti)
+        tempTi = ti
+        if( tempTi in points):
+            print("Called update")
+            #if(ti <= 1001 and ti >= 999): print("WARNING : " + str(ti))
+            if(str(points[tempTi]).endswith(".0") == True):
+                print("Note on")
+                msg = Message('note_on', note=int(str(points[tempTi]).split(".")[0]), channel = 1, velocity = 60)
+                print('Sending {}'.format(msg))
+                portObj.send(msg)
+            else:
+                print("Note off")
+                msg = Message('note_off', note=int(str(points[tempTi]).split(".")[0]), channel = 1)
+                print('Sending {}'.format(msg))
+                portObj.send(msg)
+        #time.sleep(0.05)
 
 ## Will force usage of GUI since 1.0.6
 guiEn = True
@@ -265,7 +313,8 @@ if(guiEn == False):
 
 else:
     print("Building GUI")
-    mFont = ("Helvetica", 12)
+    mFontB = ("Helvetica", 12, "bold")
+    mFont= ("Helvetica", 12)
     window = tkinter.Tk()
     window.title("Time MIDI Sender")
     window.geometry('800x300')
@@ -294,9 +343,9 @@ else:
     
     timeFrame = tkinter.Frame(window, borderwidth = 1,width=40, height=50, bg="#282828", relief=tkinter.SUNKEN) ## timeframe, get it?
     
-    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000", bg="#282828", fg="gray99", font=mFont)   # Format HH:MM:SS.ms-
+    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000", bg="#282828", fg="gray99", font=mFontB)   # Format HH:MM:SS.ms-
     playTime.grid(row=1, column = 1)
-    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0", bg="#282828", fg="gray99", font=mFont)
+    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0", bg="#282828", fg="gray99", font=mFontB)
     playTimeMillis.grid(row=2, column = 1)
     
     timeFrame.grid(row=11, column = 4)
@@ -345,17 +394,7 @@ if(guiEn == False):
                     #print(" !!!!!!!!!!! " + str(str(points[pygame.mixer.music.get_pos()]).endswith(".0")))
                 ti = pygame.mixer.music.get_pos()
                 
-                if( ti in points):
-                    if(str(points[ti]).endswith(".0") == True):
-                        print("Note on")
-                        msg = Message('note_on', note=int(str(points[ti]).split(".")[0]), channel = 1, velocity = 60)
-                        print('Sending {}'.format(msg))
-                        port.send(msg)
-                    else:
-                        print("Note off")
-                        msg = Message('note_off', note=int(str(points[ti]).split(".")[0]), channel = 1)
-                        print('Sending {}'.format(msg))
-                        port.send(msg)
+                
 
                 
     except KeyboardInterrupt:
@@ -363,16 +402,20 @@ if(guiEn == False):
         exitProg()
         print(points)
 else:
+    t = Thread(target=sendMidis, args=(points,))
+    t.setDaemon(True)
+    t.start()
     mT = False
     while True:
-        
         window.update()
         if(mT):
-                canvas._tkcanvas.pack_forget()
+            canvas._tkcanvas.pack_forget()
                 
         if(loaded):
-            evt = pygame.mixer.music.get_endevent()
+            updateTimeText()
+            
             ti = pygame.mixer.music.get_pos()
+            
             a.set_xlim(ti,ti+60000)
             canvas = None
             canvas = FigureCanvasTkAgg(f, master=curve)
@@ -382,29 +425,24 @@ else:
             canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
             mT = True
             window.update()
-            
+##            
             #canvas._tkcanvas.pack_forget()
-            if(evt != 0): print(evt)
-            if(playing):
- 
-                pre = str(ti%1000)
-                while(len(pre) < 3):
-                    pre = "0" + str(pre)
-                formTime = "Time: " + time.strftime('%H:%M:%S:{}'.format(pre), time.gmtime(ti/1000.0))# + " (Milliseconds: " + str(ti) + ")"
-                playTime["text"] = formTime
-                playTimeMillis["text"] = "Milliseconds: " + str(ti)
+            #if(evt != 0): print(evt)
+            #if(playing):
+                 #print("Stuff")
+                #start_new_thread(updateTimeText,())
                 
-                if( ti in points):
-                    if(str(points[ti]).endswith(".0") == True):
-                        print("Note on")
-                        msg = Message('note_on', note=int(str(points[ti]).split(".")[0]), channel = 1, velocity = 60)
-                        print('Sending {}'.format(msg))
-                        portObj.send(msg)
-                    else:
-                        print("Note off")
-                        msg = Message('note_off', note=int(str(points[ti]).split(".")[0]), channel = 1)
-                        print('Sending {}'.format(msg))
-                        portObj.send(msg)
+                #if( ti in points):
+                #    if(str(points[ti]).endswith(".0") == True):
+                #        print("Note on")
+                #        msg = Message('note_on', note=int(str(points[ti]).split(".")[0]), channel = 1, velocity = 60)
+                #        print('Sending {}'.format(msg))
+                #        portObj.send(msg)
+                #    else:
+                #        print("Note off")
+                #        msg = Message('note_off', note=int(str(points[ti]).split(".")[0]), channel = 1)
+                #        print('Sending {}'.format(msg))
+                #        portObj.send(msg)
             
             #if(play):
             #    pygame.mixer.music.play()
