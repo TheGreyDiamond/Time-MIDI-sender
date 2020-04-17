@@ -9,6 +9,7 @@ from mido import Message
 import tkinter
 from tkinter import filedialog
 from tkinter.messagebox import showinfo
+
 import easygui
 
 from numpy import arange, sin, pi
@@ -264,10 +265,11 @@ if(guiEn == False):
 
 else:
     print("Building GUI")
+    mFont = ("Helvetica", 12)
     window = tkinter.Tk()
     window.title("Time MIDI Sender")
     window.geometry('800x300')
-    window["bg"] = "gray64"
+    window["bg"] = "#1b1b1b"
     window.protocol("WM_DELETE_WINDOW", exitProg)
     menu = tkinter.Menu(window)
     window.config(menu=menu)
@@ -278,32 +280,32 @@ else:
     file.add_command(label="Unload", command=unload)
     file.add_command(label="Exit", command=exitProg)
     
-    opendFile = tkinter.Label(window, text = projectName, bg="gray64")
+    opendFile = tkinter.Label(window, text = projectName, bg="#1b1b1b", fg="gray77", font=mFont)
     opendFile.grid(row=0, column=0)
-    loadB = tkinter.Button(window, text="Load", command = load, bg="gray64")
+    loadB = tkinter.Button(window, text="Load", command = load, bg="#1b1b1b", fg="gray99", font=mFont)
     loadB.grid(row=0, column = 1, padx=2)
-    unloadB = tkinter.Button(window, text="Unload", command = unload, bg="gray64")
+    unloadB = tkinter.Button(window, text="Unload", command = unload, bg="#1b1b1b", fg="gray99", font=mFont)
     unloadB.grid(row=0, column = 2, padx=2)
 
     
-    playControls = tkinter.Frame(window, borderwidth = 1,width=100, height=100, bg="gray64", relief=tkinter.SUNKEN)
-    control = tkinter.Label(playControls, text = "Play control", bg="gray64")
+    playControls = tkinter.Frame(window, borderwidth = 1,width=100, height=100, bg="#282828", relief=tkinter.SUNKEN)
+    control = tkinter.Label(playControls, text = "Play control", bg="#282828", fg="gray99")
     control.grid(row=1, column = 2)
     
-    timeFrame = tkinter.Frame(window, borderwidth = 1,width=40, height=50, bg="gray64", relief=tkinter.SUNKEN) ## timeframe, get it?
+    timeFrame = tkinter.Frame(window, borderwidth = 1,width=40, height=50, bg="#282828", relief=tkinter.SUNKEN) ## timeframe, get it?
     
-    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000", bg="gray64")   # Format HH:MM:SS.ms-
+    playTime = tkinter.Label(timeFrame, text = "Time: 00:00:00.000", bg="#282828", fg="gray99", font=mFont)   # Format HH:MM:SS.ms-
     playTime.grid(row=1, column = 1)
-    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0", bg="gray64")
+    playTimeMillis = tkinter.Label(timeFrame, text = "Milliseconds: 0", bg="#282828", fg="gray99", font=mFont)
     playTimeMillis.grid(row=2, column = 1)
     
     timeFrame.grid(row=11, column = 4)
     
-    play = tkinter.Button(playControls, text="Play", command = myPlay, bg="gray64")
+    play = tkinter.Button(playControls, text="Play", command = myPlay, bg="#282828", fg="gray99", font=mFont)
     play.grid(row=2, column = 1, padx = 2)
-    pause = tkinter.Button(playControls, text="Pause", command = myPause, bg="gray64")
+    pause = tkinter.Button(playControls, text="Pause", command = myPause, bg="#282828", fg="gray99", font=mFont)
     pause.grid(row=2, column = 2, padx = 2)
-    stop = tkinter.Button(playControls, text="Stop", command = myStop, bg="gray64")
+    stop = tkinter.Button(playControls, text="Stop", command = myStop, bg="#282828", fg="gray99", font=mFont)
     stop.grid(row=2, column = 3, padx = 2)
     playControls.grid(row=10, column=4)
     
@@ -321,7 +323,7 @@ else:
     helpM.add_command(label="About", command=aboutPopup)
     menu.add_cascade(label="Help", menu=helpM)
 
-    curve = tkinter.Frame(window, borderwidth = 1,width=40, height=20, bg="gray64", relief=tkinter.SUNKEN)
+    curve = tkinter.Frame(window, borderwidth = 1,width=40, height=20, bg="#282828", relief=tkinter.SUNKEN)
     curve.grid(row=20, column=10)
     window.update()
 
