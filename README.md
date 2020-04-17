@@ -66,6 +66,7 @@ There is the main branch, the main branch is kinda stable, it's called `master`.
 - python-rtmdidi
 - pygame>=2.0.0dev6
 - pyplot
+- numpy
 
 [img1]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightselection.png?raw=truee "MiDi trigger"
 [img2]: https://github.com/TheGreyDiamond/Time-MIDI-sender/blob/master/screenshots/dasLightMidi2.png?raw=true "MiDi trigger"
