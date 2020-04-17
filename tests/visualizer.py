@@ -25,5 +25,6 @@ plot.plot(signalData)
 plot.xlabel('Sample')
 
 plot.ylabel('Amplitude')
-
+print(plot.xlim())
+plot.xlim(10000,80000)
 plot.show()
