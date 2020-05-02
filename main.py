@@ -19,7 +19,7 @@ from scipy.io import wavfile
 
 pygame.mixer.init()
 
-version = "1.0.9DEV"
+version = "1.2.0"
 
 print("Welcome")
 isOkay = False
@@ -389,8 +389,8 @@ else:
     helpM.add_command(label="About", command=aboutPopup)
     menu.add_cascade(label="Help", menu=helpM)
 
-    curve = tkinter.Frame(window, borderwidth = 1,width=40, height=20, bg="#282828", relief=tkinter.SUNKEN)
-    curve.grid(row=20, column=10)
+    #curve = tkinter.Frame(window, borderwidth = 1,width=40, height=20, bg="#282828", relief=tkinter.SUNKEN)
+    #curve.grid(row=20, column=10)
     window.update()
 
     
@@ -421,17 +421,17 @@ else:
         window.update()
         updateTimeText()
         window.update()
-        if(mT):
-            canvas._tkcanvas.pack_forget()
+        #if(mT):
+            #canvas._tkcanvas.pack_forget()
         if(loaded):
             
             ti = pygame.mixer.music.get_pos()
             a.set_xlim(ti,ti+60000)
             #canvas = None
-            canvas = FigureCanvasTkAgg(f, master=curve)
-            canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+            #canvas = FigureCanvasTkAgg(f, master=curve)
+            #canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
-            canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+            #canvas._tkcanvas.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
             window.update()
             mT = True
             window.update()
