@@ -1,4 +1,4 @@
-# THIS IS THE DEB BRANCH
+# THIS IS THE DEV BRANCH
 # Time MIDI sender 
 Sends MIDI notes according to a file. Made for use with DasLight
 
